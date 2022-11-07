@@ -10,13 +10,16 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
-    REGISTER_USER: "REGISTER_USER"
+    REGISTER_USER: "REGISTER_USER",
+    ACCOUNT_ERROR: "ACCOUNT_ERROR",
+    CLOSE_MODAL: "CLOSE_MODAL"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        modalOpen: null
     });
     const history = useHistory();
 
@@ -30,30 +33,65 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    modalOpen: false
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    modalOpen: false
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    modalOpen: false
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    modalOpen: false
+                })
+            }
+            case AuthActionType.ACCOUNT_ERROR: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    modalOpen: payload
+                })
+            }
+            case AuthActionType.CLOSE_MODAL: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    modalOpen: null
                 })
             }
             default:
                 return auth;
         }
+    }
+
+    auth.showAccountErrorModal = (errorMessage) => {
+        authReducer({
+            type: AuthActionType.ACCOUNT_ERROR,
+            payload: errorMessage
+        });
+    }
+
+    auth.closeAccountErrorModal = () => {
+        authReducer({
+            type: AuthActionType.CLOSE_MODAL
+        });
+    }
+
+    auth.isAccountErrorModalOpen = () => {
+        return auth.modalOpen!==null;
     }
 
     auth.getLoggedIn = async function () {
@@ -70,28 +108,38 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.REGISTER_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            auth.loginUser(email,password)
+        try{
+            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                auth.loginUser(email,password)
+            }
+        } catch(error){
+            console.log(error.response.data.errorMessage)
+            auth.showAccountErrorModal(error.response.data.errorMessage)
         }
     }
 
     auth.loginUser = async function(email, password) {
-        const response = await api.loginUser(email, password);
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
+        try{
+            const response = await api.loginUser(email, password);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            }
+        } catch(error){
+            console.log(error.response.data.errorMessage)
+            auth.showAccountErrorModal(error.response.data.errorMessage)
         }
     }
 
