@@ -23,9 +23,12 @@ function WorkspaceScreen() {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
-    return (
-        <Box>
-        <List 
+
+    let list = <div></div>
+
+    if (store.currentList!=null){
+        list= (
+            <List 
             id="playlist-cards" 
             sx={{ width: '100%', bgcolor: 'background.paper' }}
         >
@@ -39,7 +42,18 @@ function WorkspaceScreen() {
                     />
                 ))  
             }
-         </List>            
+         </List>
+        )
+    }
+    else{
+        store.closeCurrentList();
+        store.history.push('/')
+        list= <div></div>
+    }
+    
+    return (
+        <Box>
+        {list}          
          { modalJSX }
          </Box>
     )
