@@ -34,28 +34,28 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    modalOpen: false
+                    modalOpen: null
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    modalOpen: false
+                    modalOpen: null
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
                     loggedIn: false,
-                    modalOpen: false
+                    modalOpen: null
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    modalOpen: false
+                    modalOpen: null
                 })
             }
             case AuthActionType.ACCOUNT_ERROR: {
