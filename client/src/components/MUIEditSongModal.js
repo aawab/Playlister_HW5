@@ -87,7 +87,8 @@ export default function MUIEditSongModal() {
                             position: 'relative',
                             backgroundColor: "#B03910",
                             top: '40%',
-                            left: '20%'
+                            left: '20%',
+                            marginTop: '8px'
                         }}
                         onClick={handleConfirmEditSong}
                 >Confirm</Button>
@@ -98,7 +99,8 @@ export default function MUIEditSongModal() {
                             color: "#B03910",
                             borderColor: "#B03910",
                             top: '40%',
-                            left: '30%'
+                            left: '30%',
+                            marginTop: '8px'
                         }}
                         onClick={handleCancelEditSong}
                 >Cancel</Button>

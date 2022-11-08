@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import SongCard from './SongCard.js'
 import MUIEditSongModal from './MUIEditSongModal'
@@ -23,6 +23,34 @@ function WorkspaceScreen() {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
+
+    // handle what happens on key press
+    const handleKeyPress = useCallback((event) => {
+        if (store.currentModal==="NONE"){
+            console.log(`Key pressed: ${event.key}`);
+            if (event.ctrlKey){
+                if (event.keyCode === 90){
+                    store.undo()
+                    event.preventDefault();
+                }
+                else if (event.keyCode === 89){
+                    store.redo()
+                    event.preventDefault();
+                }
+            }
+        }
+        
+    }, [store]);
+
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener('keydown', handleKeyPress);
+
+        // remove the event listener
+        return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     let list = <div></div>
 
