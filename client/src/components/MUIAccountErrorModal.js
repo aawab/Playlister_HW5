@@ -26,11 +26,11 @@ export default function MUIAccountErrorModal() {
     }
 
     return (
-            <Modal
-                open={auth.modalOpen!==null}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                >
+        <Modal
+            open={auth.modalOpen!==null}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            >
             <Box sx={style}>
                 <Alert severity="error">
                 <AlertTitle>Error</AlertTitle>
@@ -48,6 +48,6 @@ export default function MUIAccountErrorModal() {
                         onClick={handleCloseModal}
                 >Close</Button>
             </Box>
-    </Modal>
+        </Modal>
     );
 }

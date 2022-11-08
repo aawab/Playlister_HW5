@@ -2,6 +2,7 @@ import { useContext, useState } from 'react'
 import GlobalStoreContext from '../store';
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 
 const style = {
@@ -11,9 +12,8 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
+    boxShadow: 10,
+    p: 2,
 };
 
 export default function MUIEditSongModal() {
@@ -49,19 +49,13 @@ export default function MUIEditSongModal() {
 
     return (
         <Modal
-            open={store.listMarkedForDeletion !== null}
+            open={store.currentModal === "EDIT_SONG"}
         >
             <Box sx={style}>
             <div
-            id="edit-song-modal"
-            className="modal is-visible"
-            data-animation="slideInOutLeft">
-            <div
                 id='edit-song-root'
                 className="modal-root">
-                <div
-                    id="edit-song-modal-header"
-                    className="modal-north">Edit Song</div>
+                <h1>Edit Song</h1>
                 <div
                     id="edit-song-modal-content"
                     className="modal-center">
@@ -87,22 +81,28 @@ export default function MUIEditSongModal() {
                         defaultValue={youTubeId} 
                         onChange={handleUpdateYouTubeId} />
                 </div>
-                <div className="modal-south">
-                    <input 
-                        type="button" 
-                        id="edit-song-confirm-button" 
-                        className="modal-button" 
-                        value='Confirm' 
-                        onClick={handleConfirmEditSong} />
-                    <input 
-                        type="button" 
-                        id="edit-song-cancel-button" 
-                        className="modal-button" 
-                        value='Cancel' 
-                        onClick={handleCancelEditSong} />
-                </div>
+                <Button variant="contained"
+                        className="modal-button"
+                        style={{
+                            position: 'relative',
+                            backgroundColor: "#B03910",
+                            top: '40%',
+                            left: '20%'
+                        }}
+                        onClick={handleConfirmEditSong}
+                >Confirm</Button>
+                <Button variant="outlined"
+                        className="modal-button"
+                        style={{
+                            position: 'relative',
+                            color: "#B03910",
+                            borderColor: "#B03910",
+                            top: '40%',
+                            left: '30%'
+                        }}
+                        onClick={handleCancelEditSong}
+                >Cancel</Button>
             </div>
-        </div>
             </Box>
         </Modal>
     );
