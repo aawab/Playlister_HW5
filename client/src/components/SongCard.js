@@ -70,6 +70,7 @@ function SongCard(props) {
                 id={"remove-song-" + index}
                 className="list-card-button"
                 value={"\u2715"}
+                disabled={store.currentModal!=="NONE"}
                 onClick={handleRemoveSong}
             />
         </div>
