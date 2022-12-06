@@ -25,7 +25,6 @@ export default function SplashScreen() {
                         maxHeight: { xs: 233},
                         maxWidth: { xs: 350 },
                         }}
-                        alt="The house from the offer."
                         src={Logo}
                     />
                     <Typography component="h1" variant="h3" sx={{

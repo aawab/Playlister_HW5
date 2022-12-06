@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
+import Logo from '../logo_playlister.png';
 import Typography from '@mui/material/Typography';
 
 export default function AppBanner() {
@@ -96,14 +97,12 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
-                    >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
-                    </Typography>
+                    <Box component="img" sx={{
+                        maxHeight: { xs: 100},
+                        maxWidth: { xs: 200 },
+                        }}
+                        src={Logo}
+                    />
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
