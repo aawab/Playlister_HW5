@@ -68,6 +68,7 @@ export default function HomeBar() {
                     variant="contained"
                     disableElevation
                     onClick={handleClick}
+                    edge="end"
                     endIcon={<SortIcon />}
                 >
                     SORT BY

@@ -16,6 +16,7 @@ import WorkspaceScreen from './WorkspaceScreen'
 import TabWrapper from './TabWrapper'
 import CommentsScreen from './CommentsScreen'
 import PlayerScreen from './PlayerScreen'
+import CommentCard from './CommentCard'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -40,4 +41,5 @@ export {
     WorkspaceScreen,
     TabWrapper,
     CommentsScreen,
-    PlayerScreen }
+    PlayerScreen,
+    CommentCard }

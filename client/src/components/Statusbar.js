@@ -25,27 +25,23 @@ function Statusbar() {
     }
     
     return (
-        <Box sx={{background: 'white'}}>
-            <Grid container component="main" align="center">
-                <Grid item xs={12} justifyContent="center" >
-                    <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        >
-                        <Fab 
-                            color="primary" 
-                            onClick={handleCreateNewList}
-                            disabled={store.listNameActive}
-                        >   
-                        <AddIcon />
-                        </Fab>
-                        <Typography variant="h5">{text}</Typography>
-                    </Box>
-                    
-                </Grid>
-            </Grid>
+        <Box sx={{ p: 1, background: 'white', alignContent:'center'}}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection:'row',
+                    justifyContent: 'center',
+                }}
+                >
+                <Fab size="small"
+                    color="primary" 
+                    onClick={handleCreateNewList}
+                    disabled={store.listNameActive}
+                >   
+                <AddIcon />
+                </Fab>
+                <Typography variant="h5">{text}</Typography>
+            </Box>
         </Box>
     );
 }

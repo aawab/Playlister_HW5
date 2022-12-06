@@ -9,6 +9,8 @@ import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid';
+import CommentCard from './CommentCard';
+import Box from '@mui/material/Box';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -30,7 +32,7 @@ const CommentsScreen = () => {
             <List sx={{bgcolor: 'background.paper' }}>
             {
                 store.idNamePairs.map((pair) => (
-                    <ListCard
+                    <CommentCard
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
@@ -40,16 +42,14 @@ const CommentsScreen = () => {
             </List>;
     }
     return (
-        <Grid container>
-            <Grid item xs={12} sx={{maxHeight: '100vh', overflow: 'auto' }}>
-                <Paper >
-                    {
-                        listCard
-                    }
-                    <MUIDeleteModal />
-                </Paper>
-            </Grid>
-        </Grid>
+        <Box>
+            <Paper >
+                {
+                    listCard
+                }
+                <MUIDeleteModal />
+            </Paper>
+        </Box>
     )
 }
 

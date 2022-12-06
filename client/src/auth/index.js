@@ -107,9 +107,9 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function(firstName, lastName, userName, email, password, passwordVerify) {
         try{
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
+            const response = await api.registerUser(firstName, lastName, userName, email, password, passwordVerify);      
             if (response.status === 200) {
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
@@ -157,8 +157,8 @@ function AuthContextProvider(props) {
     auth.getUserInitials = function() {
         let initials = "";
         if (auth.user) {
-            initials += auth.user.firstName.charAt(0);
-            initials += auth.user.lastName.charAt(0);
+            initials += auth.user.firstName.charAt(0).toUpperCase();
+            initials += auth.user.lastName.charAt(0).toUpperCase();
         }
         console.log("user initials: " + initials);
         return initials;
