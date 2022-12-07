@@ -268,7 +268,7 @@ updatePlaylist = async (req, res) => {
         }
 
         async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
+            await User.findOne({ email: list.ownerEmail }, (err, user) =>{
                 console.log("user._id: " + user._id);
                 console.log("req.userId: " + req.userId);
                 console.log("req.body.name: " + req.body.name);

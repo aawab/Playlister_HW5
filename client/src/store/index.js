@@ -377,21 +377,23 @@ function GlobalStoreContextProvider(props) {
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
-    store.loadIdNamePairs = function () {
-        async function asyncLoadIdNamePairs() {
+    store.loadIdNamePairs = function (text) {
+        async function asyncLoadIdNamePairs(text) {
             const response = await api.getPlaylistPairs();
+            console.log("reload")
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
+                if(text!=null) pairsArray=pairsArray.filter((pair)=>pair.name==text)
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                    payload: {idNamePairs: pairsArray, search: null, page: "YOUR_LISTS", sort: store.currentSort}
+                    payload: {idNamePairs: pairsArray, search: text, page: "YOUR_LISTS", sort: store.currentSort}
                 });
             }
             else {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         }
-        asyncLoadIdNamePairs();
+        asyncLoadIdNamePairs(text);
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION

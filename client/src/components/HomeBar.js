@@ -40,7 +40,7 @@ export default function HomeBar() {
     function handleSearch(event) {
         if (event.code === "Enter") {
             if(store.currentPage=="YOUR_LISTS"){
-                store.loadIdNamePairs(); //TODO HOME SCREEN SEARCH?
+                store.loadIdNamePairs(text);
             }
             else if(store.currentPage=="ALL_LISTS"){
                 store.searchByTitle(text);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { GlobalStoreContext } from '../store'
 import YouTube from 'react-youtube';
 
@@ -15,18 +15,19 @@ import Box from '@mui/material/Box';
     
     @author Aawab
 */
-const PlayerScreen = () => {
+const PlayerScreen = (props) => {
     const { store } = useContext(GlobalStoreContext);
+    const { currentTab } = props
+    const currentSong = useRef(0)
 
     console.log("player "+ store.viewingList)
 
+
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let player=<div></div>
-    let playlist=""
-    let currentSong = 0;
-    let title=""
-    let artist=""
-
+    let playlist="Placeholder"  
+    let title="Placeholder"
+    let artist="Placeholder"
 
     const playerOptions = {
         height: "300vh",
@@ -40,15 +41,30 @@ const PlayerScreen = () => {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = store.viewingList.songs[currentSong].youTubeId;
+        let song = store.viewingList.songs[currentSong.current].youTubeId;
         player.loadVideoById(song);
         player.playVideo();
     }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        currentSong++;
-        currentSong = currentSong % store.viewingList.songs.length;
+        console.log("song now " + currentSong.current)
+        currentSong.current=currentSong.current+1;
+        console.log("song after " + currentSong.current)
+        currentSong.current = currentSong.current % store.viewingList.songs.length;
+        console.log("song after " + currentSong.current)
+        document.getElementById('song-num').innerHTML="Song#: " + currentSong.current
+        document.getElementById('song-title').innerHTML="Title: " + store.viewingList.songs[currentSong.current].title
+        document.getElementById('song-artist').innerHTML="Artist: " + store.viewingList.songs[currentSong.current].artist
+    }
+
+    // THIS FUNCTION DECREMENTS THE PLAYLIST SONG TO THE PREV ONE
+    function decSong() {
+        console.log("song now " + currentSong.current)
+        currentSong.current=currentSong.current-1;
+        console.log("song before " + currentSong.current)
+        currentSong.current = currentSong.current % store.viewingList.songs.length;
+        console.log("song before " + currentSong.current)
     }
 
     function onPlayerReady(event) {
@@ -66,7 +82,9 @@ const PlayerScreen = () => {
         if (playerStatus === -1) {
             // VIDEO UNSTARTED
             console.log("video "+ store.viewingList.name)
-            playlist=store.viewingList.name
+            console.log("video "+ store.viewingList.songs[currentSong.current].title)
+            console.log("video "+ store.viewingList.songs[currentSong.current].artist)
+            
             console.log("-1 Video unstarted");
         } else if (playerStatus === 0) {
             // THE VIDEO HAS COMPLETED PLAYING
@@ -81,7 +99,7 @@ const PlayerScreen = () => {
             console.log("2 Video paused");
         } else if (playerStatus === 3) {
             // THE VIDEO IS BUFFERING
-            console.log(store.viewingList.songs[currentSong].title)
+            console.log(store.viewingList.songs[currentSong.current].title)
             console.log("3 Video buffering");
         } else if (playerStatus === 5) {
             // THE VIDEO HAS BEEN CUED
@@ -89,11 +107,20 @@ const PlayerScreen = () => {
         }
     }
 
+    function handlePlay(event) {
+        event.stopPropagation()
+        player.playVideo();
+    }
+
+    function handleStop(event) {
+        event.stopPropagation()
+        player.pauseVideo();
+    }
     
 
     if (store.viewingList!=null){
         player=<YouTube
-        videoId={store.viewingList.songs[currentSong].youTubeId}
+        videoId={store.viewingList.songs[currentSong.current].youTubeId}
         opts={playerOptions}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} />;
@@ -103,35 +130,35 @@ const PlayerScreen = () => {
         opts={playerOptions}/>;
     }
 
-    return <Box sx={{height:'90%', objectFit: 'contain', overflow: 'auto'}}>
+    return <Box display={currentTab==2? 'none' : 'visible'} sx={{height:'90%', objectFit: 'contain', overflow: 'auto'}}>
             {player}
             <Grid container direction='column' sx={{ p: 1, flexGrow: 1, flexDirection: 'vertical' }}>
                 <Typography alignSelf='center'>
                     Now Playing
                 </Typography>
-                <Typography>
+                <Typography id = 'list-name'>
                     Playlist: {playlist}
                 </Typography>
-                <Typography>
-                    Song#: {currentSong}
+                <Typography id='song-num'>
+                    Song#: 
                 </Typography>
-                <Typography>
-                    Title: {title}
+                <Typography id='song-title'>
+                    Title: 
                 </Typography>
-                <Typography>
-                    Artist: {artist}
+                <Typography id='song-artist'>
+                    Artist: 
                 </Typography>
                 <Grid container position='flex-end' justifyContent='center'>
-                    <IconButton aria-label='skipprev'>
+                    <IconButton aria-label='skipprev' onClick={()=>decSong()} disabled={currentSong.current==0}>
                         <SkipPreviousIcon/>
                     </IconButton>
-                    <IconButton aria-label='stop'>
+                    <IconButton aria-label='stop' onClick={()=>handleStop()}>
                         <StopIcon/>
                     </IconButton>
-                    <IconButton aria-label='play'>
+                    <IconButton aria-label='play' onClick={()=>handlePlay()}>
                         <PlayIcon/>
                     </IconButton>
-                    <IconButton aria-label='skipnext'>
+                    <IconButton aria-label='skipnext' onClick={()=>incSong()}>
                         <SkipNextIcon/>
                     </IconButton>
                 </Grid>

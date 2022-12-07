@@ -17,10 +17,7 @@ export default function TabWrapper() {
     };
 
     let content=<div></div>
-    if (currentTab==1){
-        content=<PlayerScreen/>
-    }
-    else{
+    if (currentTab==2){
         content=<CommentsScreen/>
     }
 
@@ -37,9 +34,9 @@ export default function TabWrapper() {
                 >
                 Comments
                 </Button>
+                <PlayerScreen currentTab={currentTab}/>
                 {content}
             </Box>
-            
         </Box>
     )
 }
