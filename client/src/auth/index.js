@@ -143,6 +143,21 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.loginGuest = async function() {
+        try{
+            authReducer({
+                type: AuthActionType.LOGIN_USER,
+                payload: {
+                    user: "guest"
+                }
+            })
+            history.push("/");
+        } catch(error){
+            console.log(error.response.data.errorMessage)
+            auth.showAccountErrorModal(error.response.data.errorMessage)
+        }
+    }
+
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
         if (response.status === 200) {

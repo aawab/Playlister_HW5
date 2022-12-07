@@ -48,35 +48,52 @@ function SongCard(props) {
     }
 
     let cardClass = "list-card unselected-list-card";
+    let songCard= <div
+                key={index}
+                id={'song-' + index + '-card'}
+                className={cardClass}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                draggable="true"
+                onClick={handleClick}
+            >
+                {index + 1}.
+                <a
+                    id={'song-' + index + '-link'}
+                    className="song-link">
+                    {song.title} by {song.artist}
+                </a>
+                <Button
+                    id=''
+                    disabled={store.currentModal!=="NONE"}
+                    onClick={handleRemoveSong}
+                    variant="contained"
+                    size="large"
+                    sx={{background:'338DFF', float:'right', JustifySelf:'center'}}>
+                        <CloseIcon/>
+                </Button>
+            </div>
+    if (store.currentList!=null && store.currentList.isPublished){
+        songCard= <div
+                key={index}
+                id={'song-' + index + '-card'}
+                className={cardClass}
+                style={{cursor: 'default'}}
+            >
+                {index + 1}.
+                <a
+                    id={'song-' + index + '-link'}
+                    className="song-link">
+                    {song.title} by {song.artist}
+                </a>
+            </div>
+    }
     return (
-        <div
-            key={index}
-            id={'song-' + index + '-card'}
-            className={cardClass}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            draggable="true"
-            onClick={handleClick}
-        >
-            {index + 1}.
-            <a
-                id={'song-' + index + '-link'}
-                className="song-link">
-                {song.title} by {song.artist}
-            </a>
-            <Button
-                id=''
-                disabled={store.currentModal!=="NONE"}
-                onClick={handleRemoveSong}
-                variant="contained"
-                
-                size="large"
-                sx={{background:'338DFF', float:'right', JustifySelf:'center'}}>
-                    <CloseIcon/>
-            </Button>
+        <div>
+            {songCard}
         </div>
     );
 }

@@ -77,15 +77,17 @@ export default function AppBanner() {
     let editToolbar = "";
     let menu = loggedOutMenu;
     console.log(auth.loggedIn)
-    if (auth.loggedIn==true) {
+    if (auth.loggedIn==true && auth.user!="guest") {
         menu = loggedInMenu;
     }
     
     function getAccountMenu(loggedIn) {
-        let userInitials = auth.getUserInitials();
-        console.log("userInitials: " + userInitials);
-        if (loggedIn) 
+        
+        if (loggedIn && auth.user!="guest") {
+            let userInitials = auth.getUserInitials();
+            console.log("userInitials: " + userInitials);
             return <div>{userInitials}</div>;
+        }
         else
             return <AccountCircle />;
     }

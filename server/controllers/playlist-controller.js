@@ -267,7 +267,6 @@ updatePlaylist = async (req, res) => {
             })
         }
 
-        // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
                 console.log("user._id: " + user._id);
@@ -278,7 +277,7 @@ updatePlaylist = async (req, res) => {
                 list.songs = body.playlist.songs;
                 list.comments = body.playlist.comments;
                 list.likes = body.playlist.likes;
-                list.dislikes = body.playlist.likes;
+                list.dislikes = body.playlist.dislikes;
                 list.listens = body.playlist.listens;
                 list.isPublished = body.playlist.isPublished;
                 list.publishDate = body.playlist.publishDate;

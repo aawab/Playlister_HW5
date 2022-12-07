@@ -2,10 +2,14 @@ import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import YouTube from 'react-youtube';
 
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
+import PlayIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 /*
     This React component houses the player
     
@@ -14,29 +18,29 @@ import Grid from '@mui/material/Grid';
 const PlayerScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
-    console.log("player "+ store.currentList)
-
-    let playlist = [
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-    ];
+    console.log("player "+ store.viewingList)
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
+    let player=<div></div>
+    let playlist=""
     let currentSong = 0;
+    let title=""
+    let artist=""
+
 
     const playerOptions = {
+        height: "300vh",
+        width: "100%",
         playerVars: {
-            height:'10%', width: '100%' ,
             // https://developers.google.com/youtube/player_parameters
-            autoplay: 0,
+            autoplay: 1,
         },
     };
 
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        let song = store.viewingList.songs[currentSong].youTubeId;
         player.loadVideoById(song);
         player.playVideo();
     }
@@ -44,7 +48,7 @@ const PlayerScreen = () => {
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
         currentSong++;
-        currentSong = currentSong % playlist.length;
+        currentSong = currentSong % store.viewingList.songs.length;
     }
 
     function onPlayerReady(event) {
@@ -61,6 +65,8 @@ const PlayerScreen = () => {
         let player = event.target;
         if (playerStatus === -1) {
             // VIDEO UNSTARTED
+            console.log("video "+ store.viewingList.name)
+            playlist=store.viewingList.name
             console.log("-1 Video unstarted");
         } else if (playerStatus === 0) {
             // THE VIDEO HAS COMPLETED PLAYING
@@ -75,6 +81,7 @@ const PlayerScreen = () => {
             console.log("2 Video paused");
         } else if (playerStatus === 3) {
             // THE VIDEO IS BUFFERING
+            console.log(store.viewingList.songs[currentSong].title)
             console.log("3 Video buffering");
         } else if (playerStatus === 5) {
             // THE VIDEO HAS BEEN CUED
@@ -82,12 +89,55 @@ const PlayerScreen = () => {
         }
     }
 
-    return <YouTube
-        videoId={playlist[currentSong]}
+    
+
+    if (store.viewingList!=null){
+        player=<YouTube
+        videoId={store.viewingList.songs[currentSong].youTubeId}
         opts={playerOptions}
         onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} 
-        style={{height:'10%', width: '50%', objectFit: 'contain'}}/>;
+        onStateChange={onPlayerStateChange} />;
+    }
+    else{
+        player=<YouTube
+        opts={playerOptions}/>;
+    }
+
+    return <Box sx={{height:'90%', objectFit: 'contain', overflow: 'auto'}}>
+            {player}
+            <Grid container direction='column' sx={{ p: 1, flexGrow: 1, flexDirection: 'vertical' }}>
+                <Typography alignSelf='center'>
+                    Now Playing
+                </Typography>
+                <Typography>
+                    Playlist: {playlist}
+                </Typography>
+                <Typography>
+                    Song#: {currentSong}
+                </Typography>
+                <Typography>
+                    Title: {title}
+                </Typography>
+                <Typography>
+                    Artist: {artist}
+                </Typography>
+                <Grid container position='flex-end' justifyContent='center'>
+                    <IconButton aria-label='skipprev'>
+                        <SkipPreviousIcon/>
+                    </IconButton>
+                    <IconButton aria-label='stop'>
+                        <StopIcon/>
+                    </IconButton>
+                    <IconButton aria-label='play'>
+                        <PlayIcon/>
+                    </IconButton>
+                    <IconButton aria-label='skipnext'>
+                        <SkipNextIcon/>
+                    </IconButton>
+                </Grid>
+                
+            </Grid>
+        </Box>;
 }
 
 export default PlayerScreen;

@@ -15,11 +15,11 @@ const CommentsScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [text, setText] = useState("");
 
-    console.log("comments "+ store.currentList)
+    console.log("comments "+ store.viewingList)
 
     function handleCreateNewComment(event) {
-        if (event.code === "Enter" && store.currentList!=null ) {
-            //maybe add id here, or work with currentlist to post comment idk
+        if (event.code === "Enter" && store.viewingList!=null ) {
+            //maybe add id here, or work with viewingList to post comment idk
             store.createNewComment(text);
             event.target.value=""
         }
@@ -29,11 +29,11 @@ const CommentsScreen = () => {
     }
 
     let commentCard = "";
-    if (store.currentList!=null && store.currentList.isPublished) {
+    if (store.viewingList!=null && store.viewingList.isPublished) {
         commentCard = 
             <List sx={{bgcolor: 'background.paper', height:'81%', overflow: 'auto' }}>
             {
-                store.currentList.comments.map((pair) => (
+                store.viewingList.comments.map((pair) => (
                     <CommentCard
                         author={pair.author}
                         comment={pair.comment}
@@ -53,7 +53,7 @@ const CommentsScreen = () => {
                     name="comment"
                     autoComplete="Comment"
                     className='list-card'
-                    disabled = {store.currentList==null || !store.currentList.isPublished }
+                    disabled = {store.viewingList==null || !store.viewingList.isPublished }
                     onKeyPress={handleCreateNewComment}
                     onChange={handleUpdateText}
                     inputProps={{style: {fontSize: 24}}}

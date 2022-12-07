@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -15,8 +16,6 @@ import Grid from '@mui/material/Grid';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-
-import WorkspaceScreen from './WorkspaceScreen';
 
 import List from '@mui/material/List';
 import SongCard from './SongCard';
@@ -35,6 +34,7 @@ import Box from '@mui/material/Box';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const { idNamePair } = props;
     const [ expanded, setExpanded ] = useState(false);
     const [editActive, setEditActive] = useState(false);
@@ -54,21 +54,16 @@ function ListCard(props) {
         if (editActive){
             return
         }
-        if (event.detail == 2){
+        if (event.detail == 2 && auth.user!="guest" && idNamePair.ownerUsername==auth.user.userName){
             event.stopPropagation()
             console.log("handleEditName") 
             toggleEdit();
         }
         else{
-            console.log("handlePlayList for " + id);
+            console.log("viewPlaylist for " + id);
             if (!event.target.disabled) {
-                let _id = event.target.id;
-                if (_id.indexOf('list-card-text-') >= 0)
-                    _id = ("" + _id).substring("list-card-text-".length);
-
-                console.log("play" + event.target.id);
                 console.log(idNamePair._id)
-                //setPlayingList function
+                store.setViewingList(idNamePair._id)
             }
         }
     }
@@ -147,13 +142,19 @@ function ListCard(props) {
     }        
 
     //LIKE/DISLIKE
-    async function handleLikeList(event, which) {
+    async function handleLikeDislike(event, which) {
         event.stopPropagation();
-        store.likeList(idNamePair._id);
+        store.likeDislike(idNamePair._id, which);
     }
     
     let like=<ThumbUpOutlinedIcon style={{fontSize:'24pt'}} />
     let dislike=<ThumbDownOutlinedIcon style={{fontSize:'24pt'}} />
+    if (idNamePair.likes.includes(auth.user.userName)){
+        like=<ThumbUpIcon style={{fontSize:'24pt'}}></ThumbUpIcon>
+    }
+    if (idNamePair.dislikes.includes(auth.user.userName)){
+        dislike=<ThumbDownIcon style={{fontSize:'24pt'}}></ThumbDownIcon>
+    }
     return (
         <Accordion expanded={store.currentList && store.currentList._id==idNamePair._id}
             TransitionProps={{ unmountOnExit: true }}>
@@ -185,11 +186,11 @@ function ListCard(props) {
                 </Grid>
                 <Grid container direction="column" display={idNamePair.isPublished==false? 'none' : ''}>
                     <Grid item xs fontSize='16pt'  fontWeight='bold'>
-                        <IconButton aria-label='like' onClick={(event)=>handleLikeList(event,'like')}>
+                        <IconButton aria-label='like' disabled={auth.user=="guest"} onClick={(event)=>handleLikeDislike(event,"like")}>
                             {like}
                         </IconButton>
                         {idNamePair.likes.length}
-                        <IconButton aria-label='dislike' onClick={(event)=>handleLikeList(event,'dislike')}>
+                        <IconButton aria-label='dislike' disabled={auth.user=="guest"} onClick={(event)=>handleLikeDislike(event,"dislike")}>
                             {dislike}
                         </IconButton>
                         {idNamePair.dislikes.length}

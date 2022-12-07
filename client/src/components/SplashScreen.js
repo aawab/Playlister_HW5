@@ -1,3 +1,6 @@
+import { useContext, useState } from 'react';
+import AuthContext from '../auth';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -7,6 +10,12 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 
 export default function SplashScreen() {
+    const { auth } = useContext(AuthContext);
+
+    function handleGuestLogin(event){
+        auth.loginGuest()
+    }
+
     return (
         <Grid container component="main" sx={{ height: '80vh', backgroundImage: 'linear-gradient(to bottom, #86c2de, #123456)' }}>
             <CssBaseline />
@@ -60,7 +69,7 @@ export default function SplashScreen() {
                             REGISTER
                         </Button>
                     </Grid>
-                    <Button variant="contained" component={Link} to="/login"
+                    <Button variant="contained" onClick={handleGuestLogin}
                             sx={{
                                 mb: 4,
                                 mx: 2,

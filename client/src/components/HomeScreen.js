@@ -1,18 +1,17 @@
 import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
+
 import ListCard from './ListCard.js'
 import TabWrapper from './TabWrapper'
 import HomeBar from './HomeBar'
 import Statusbar from './Statusbar'
 import MUIDeleteModal from './MUIDeleteModal'
 
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid';
 
 /*
@@ -22,6 +21,7 @@ import Grid from '@mui/material/Grid';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     const [openList, setOpenList] = useState(0);
 
@@ -30,8 +30,14 @@ const HomeScreen = () => {
     };
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        if(auth.user!="guest") store.loadIdNamePairs();
+        if(auth.loggedIn && auth.user=="guest") store.changePage("ALL_LISTS")
     }, []);
+
+    
+
+    console.log("CURRENT PAGE: " + store.currentPage)
+    console.log("CURRENT SORT: " + store.currentSort)
     
     let listCard = "";
     if (store) {
