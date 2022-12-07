@@ -39,7 +39,6 @@ function WorkspaceScreen() {
                 }
             }
         }
-        
     }, [store]);
 
     useEffect(() => {

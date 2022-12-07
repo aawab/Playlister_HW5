@@ -17,9 +17,20 @@ function Statusbar() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
     let text ="Your Lists";
-    if (store.currentList){
-        text = store.currentList.name;
+    
+    if (store.currentPage=="ALL_LISTS" && store.currentSearch==null){
+        text="All Lists"
     }
+    if (store.currentPage=="ALL_LISTS" && store.currentSearch!=null){
+        text=store.currentSearch+ " Playlists"
+    }
+    if (store.currentPage=="USER_LISTS" && store.currentSearch==null){
+        text="User Lists"
+    }
+    if (store.currentPage=="USER_LISTS" && store.currentSearch!=null){
+        text=store.currentSearch+ "'s Lists"
+    }
+
     function handleCreateNewList() {
         store.createNewList();
     }
@@ -36,7 +47,8 @@ function Statusbar() {
                 <Fab size="small"
                     color="primary" 
                     onClick={handleCreateNewList}
-                    disabled={store.listNameActive}
+                    disabled={store.listNameActive||store.currentModal!="NONE"}
+                    sx={{display:store.currentPage!="YOUR_LISTS"? 'none' : ''}}
                 >   
                 <AddIcon />
                 </Fab>

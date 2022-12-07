@@ -1,16 +1,11 @@
 import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
-import ListCard from './ListCard.js'
-import MUIDeleteModal from './MUIDeleteModal'
+import { useState } from "react";
 
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid';
 import CommentCard from './CommentCard';
 import Box from '@mui/material/Box';
+import { TextField } from '@mui/material';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -18,38 +13,56 @@ import Box from '@mui/material/Box';
 */
 const CommentsScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const [text, setText] = useState("");
 
-    useEffect(() => {
-        store.loadIdNamePairs();
-    }, []);
+    console.log("comments "+ store.currentList)
 
-    function handleCreateNewComment() {
-        store.createNewComment();
+    function handleCreateNewComment(event) {
+        if (event.code === "Enter" && store.currentList!=null ) {
+            //maybe add id here, or work with currentlist to post comment idk
+            store.createNewComment(text);
+            event.target.value=""
+        }
     }
-    let listCard = "";
-    if (store) {
-        listCard = 
-            <List sx={{bgcolor: 'background.paper' }}>
+    function handleUpdateText(event){
+        setText(event.target.value)
+    }
+
+    let commentCard = "";
+    if (store.currentList!=null && store.currentList.isPublished) {
+        commentCard = 
+            <List sx={{bgcolor: 'background.paper', height:'81%', overflow: 'auto' }}>
             {
-                store.idNamePairs.map((pair) => (
+                store.currentList.comments.map((pair) => (
                     <CommentCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
+                        author={pair.author}
+                        comment={pair.comment}
                     />
                 ))
             }
             </List>;
     }
     return (
-        <Box>
-            <Paper >
-                {
-                    listCard
-                }
-                <MUIDeleteModal />
-            </Paper>
+        <Box sx={{height:'90%', objectFit: 'contain'}}>
+            <Box sx={{height:'100%', overflow: 'auto', objectFit: 'contain' }}>
+                {commentCard}
+                <TextField
+                    id='comment'
+                    margin="normal"
+                    label="Comment"
+                    name="comment"
+                    autoComplete="Comment"
+                    className='list-card'
+                    disabled = {store.currentList==null || !store.currentList.isPublished }
+                    onKeyPress={handleCreateNewComment}
+                    onChange={handleUpdateText}
+                    inputProps={{style: {fontSize: 24}}}
+                    InputLabelProps={{style: {fontSize: 24}}}
+                    sx={{position:'absolute'}}
+                    />
+            </Box>
         </Box>
+        
     )
 }
 

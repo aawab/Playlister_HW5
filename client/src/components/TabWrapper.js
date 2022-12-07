@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { useState } from "react";
-import Typography from '@mui/material/Typography';
+
 import Box from '@mui/material/Box';
 import GlobalStoreContext from '../store';
 import Button from '@mui/material/Button';
@@ -25,8 +25,8 @@ export default function TabWrapper() {
     }
 
     return (
-        <Box >
-            <Box>
+        <Box sx={{height:'100%', objectFit: 'contain'}}>
+            <Box sx={{height:'100%', objectFit: 'contain' }}>
                 <Button variant='outlined' disableElevation size="large" color="primary"
                 onClick={() => toggleCurrentTab(1)}
                 >
@@ -37,10 +37,9 @@ export default function TabWrapper() {
                 >
                 Comments
                 </Button>
+                {content}
             </Box>
-                <div>
-                    {content}
-                </div>
+            
         </Box>
     )
 }

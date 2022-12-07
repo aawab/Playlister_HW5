@@ -13,6 +13,8 @@ router.post('/playlist', auth.verify, PlaylistController.createPlaylist)
 router.delete('/playlist/:id', auth.verify, PlaylistController.deletePlaylist)
 router.get('/playlist/:id', auth.verify, PlaylistController.getPlaylistById)
 router.get('/playlistpairs', auth.verify, PlaylistController.getPlaylistPairs)
+router.get('/playlistTitles/:title', auth.verify, PlaylistController.searchByTitle)
+router.get('/playlistCreators/:username', auth.verify, PlaylistController.searchByCreator)
 router.get('/playlists', auth.verify, PlaylistController.getPlaylists)
 router.put('/playlist/:id', auth.verify, PlaylistController.updatePlaylist)
 

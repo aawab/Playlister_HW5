@@ -14,6 +14,8 @@ import Grid from '@mui/material/Grid';
 const PlayerScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
+    console.log("player "+ store.currentList)
+
     let playlist = [
         "mqmxkGjow1A",
         "8RbXIMZmVv8",
@@ -24,9 +26,8 @@ const PlayerScreen = () => {
     let currentSong = 0;
 
     const playerOptions = {
-        height: '390',
-        width: '640',
         playerVars: {
+            height:'10%', width: '100%' ,
             // https://developers.google.com/youtube/player_parameters
             autoplay: 0,
         },
@@ -85,7 +86,8 @@ const PlayerScreen = () => {
         videoId={playlist[currentSong]}
         opts={playerOptions}
         onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+        onStateChange={onPlayerStateChange} 
+        style={{height:'10%', width: '50%', objectFit: 'contain'}}/>;
 }
 
 export default PlayerScreen;

@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
@@ -61,18 +64,19 @@ function SongCard(props) {
             {index + 1}.
             <a
                 id={'song-' + index + '-link'}
-                className="song-link"
-                href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
+                className="song-link">
                 {song.title} by {song.artist}
             </a>
-            <input
-                type="button"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                value={"\u2715"}
+            <Button
+                id=''
                 disabled={store.currentModal!=="NONE"}
                 onClick={handleRemoveSong}
-            />
+                variant="contained"
+                
+                size="large"
+                sx={{background:'338DFF', float:'right', JustifySelf:'center'}}>
+                    <CloseIcon/>
+            </Button>
         </div>
     );
 }

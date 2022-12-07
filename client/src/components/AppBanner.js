@@ -79,9 +79,6 @@ export default function AppBanner() {
     console.log(auth.loggedIn)
     if (auth.loggedIn==true) {
         menu = loggedInMenu;
-        if (store.currentList) {
-            editToolbar = <EditToolbar />;
-        }
     }
     
     function getAccountMenu(loggedIn) {
@@ -103,7 +100,7 @@ export default function AppBanner() {
                         }}
                         src={Logo}
                     />
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    <Box sx={{ flexGrow: 1 }}></Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"

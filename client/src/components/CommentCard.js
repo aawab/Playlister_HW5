@@ -11,6 +11,7 @@ import Grid from '@mui/material/Grid';
 */
 function CommentCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { author, comment } = props
 
     return (
         <ListItem
@@ -18,12 +19,10 @@ function CommentCard(props) {
             style={{ width: '100%', fontSize: '24pt', justifyContent: 'center'}}>
             <Grid container direction="column" sx={{ p: 1, flexGrow: 1 }}>
                 <Grid item xs  fontWeight='bold'>
-                    Person
+                    {author}
                 </Grid>
                 <Grid item xs fontSize='12pt'>
-                    Hello, this is my cvomment. i love sucking big fat cocks and i cannot lie. i love sucking big
-                    fat cocks and i will never ever ever fucking leveer stops i lvoe fuckqwofqn  qioq iojh ym fos ur
-                    so good ohy mr odg keep gogia ahah ahafowei we
+                    {comment}
                 </Grid>
             </Grid>
         </ListItem>
