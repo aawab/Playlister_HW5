@@ -33,7 +33,7 @@ function EditToolbar() {
         store.markListForDeletion(store.currentList._id);
     }
     function handleDuplicate() {
-        store.duplicate();
+        store.duplicatePlaylist();
     }
     return (
         <div>

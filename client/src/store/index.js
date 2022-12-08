@@ -94,7 +94,7 @@ function GlobalStoreContextProvider(props) {
                     currentPage : store.currentPage,
                     currentSearch : store.currentSearch,
                     currentSort: store.currentSort,
-                    viewingList: null
+                    viewingList: store.viewingList
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -129,9 +129,9 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     accountErrorActive:null,
-                    currentPage : store.currentPage,
-                    currentSearch : store.currentSearch,
-                    currentSort: store.currentSort,
+                    currentPage : "YOUR_LISTS",
+                    currentSearch : null,
+                    currentSort: null,
                     viewingList: null
                 })
             }
@@ -283,7 +283,6 @@ function GlobalStoreContextProvider(props) {
                     viewingList: null
                 });
             }
-            // UPDATE A LIST
             case GlobalStoreActionType.SET_VIEWING_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
@@ -758,6 +757,40 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncPublishPlaylist(store.currentList._id);
+    }
+
+    store.duplicatePlaylist = function(){
+        // GET THE LIST
+        async function asyncDuplicatePlaylist(id) {
+            let response = await api.getPlaylistById(id);
+            let resp=response
+            if (response.data.success) {
+                let playlist = resp.data.playlist;
+                let userLists = await api.getPlaylistPairs();
+                if (userLists.data.success){
+                    let name=playlist.name
+                    console.log(playlist.name)
+                    if (userLists.data.idNamePairs.find(list=>list.name==playlist.name))name=name+Math.floor(Math.random()*100);
+                    const response = await api.createPlaylist(name, playlist.songs, auth.user.email, false," ", [], [], 0, [], auth.user.userName);
+                    console.log("duplicateList response: " + response);
+                    if (response.status === 201) {
+                        tps.clearAllTransactions();
+                        let newList = response.data.playlist;
+                        tps.clearAllTransactions();
+                        storeReducer({
+                            type: GlobalStoreActionType.CREATE_NEW_LIST,
+                            payload: newList
+                        }
+                        );
+                        store.loadIdNamePairs();
+                    }
+                    else {
+                        console.log("API FAILED TO CREATE A NEW LIST");
+                    }
+                }   
+            }
+        }
+        asyncDuplicatePlaylist(store.currentList._id);
     }
 
     store.likeDislike = function (id, which) {

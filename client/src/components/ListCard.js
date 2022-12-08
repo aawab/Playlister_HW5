@@ -54,7 +54,7 @@ function ListCard(props) {
         if (editActive){
             return
         }
-        if (event.detail == 2 && auth.user!="guest" && idNamePair.ownerUsername==auth.user.userName){
+        if (event.detail == 2 && auth.user!="guest" && idNamePair.ownerUsername==auth.user.userName && idNamePair.isPublished==false){
             event.stopPropagation()
             console.log("handleEditName") 
             toggleEdit();
